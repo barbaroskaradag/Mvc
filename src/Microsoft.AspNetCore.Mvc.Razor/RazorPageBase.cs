@@ -278,6 +278,11 @@ namespace Microsoft.AspNetCore.Mvc.Razor
 
         public virtual void PushWriter(TextWriter writer)
         {
+            if (writer == null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
+
             _textWriterStack.Push(ViewContext.Writer);
             ViewContext.Writer = writer;
         }
