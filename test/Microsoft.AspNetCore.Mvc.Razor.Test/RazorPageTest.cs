@@ -1444,15 +1444,23 @@ namespace Microsoft.AspNetCore.Mvc.Razor
         {
             // Arrange
             var page = CreatePage(p => { });
+            var defaultWriter = new StringWriter();
+            page.ViewContext.Writer = defaultWriter;
+
             var writer = new StringWriter();
+
+            // Act 1
             page.PushWriter(writer);
 
-            // Act
+            // Assert 1
+            Assert.Same(writer, page.ViewContext.Writer);
+
+            // Act 2
             var poppedWriter = page.PopWriter();
 
-            // Assert
-            Assert.Same(writer, poppedWriter);
-            Assert.Null(page.ViewContext.Writer);
+            // Assert 2
+            Assert.Same(defaultWriter, poppedWriter);
+            Assert.Same(defaultWriter, page.ViewContext.Writer);
         }
 
         [Fact]

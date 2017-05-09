@@ -19,7 +19,6 @@ namespace RazorWebSite
             base.WriteLiteral(value);
         }
 
-
         public override void Write(object value)
         {
             base.WriteLiteral("Write says:");

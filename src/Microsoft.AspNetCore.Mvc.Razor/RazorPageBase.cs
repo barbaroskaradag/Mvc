@@ -28,6 +28,7 @@ namespace Microsoft.AspNetCore.Mvc.Razor
     /// </summary>
     public abstract class RazorPageBase : IRazorPage
     {
+        private readonly Stack<TextWriter> _textWriterStack = new Stack<TextWriter>();
         private StringWriter _valueBuffer;
         private ITagHelperFactory _tagHelperFactory;
         private IViewBufferScope _bufferScope;
@@ -35,7 +36,6 @@ namespace Microsoft.AspNetCore.Mvc.Razor
         private AttributeInfo _attributeInfo;
         private TagHelperAttributeInfo _tagHelperAttributeInfo;
         private IUrlHelper _urlHelper;
-        private Stack<TextWriter> _textWriterStack = new Stack<TextWriter>();
 
         public virtual ViewContext ViewContext { get; set; }
 
@@ -276,7 +276,8 @@ namespace Microsoft.AspNetCore.Mvc.Razor
             return content;
         }
 
-        public virtual void PushWriter(TextWriter writer)
+        // Internal for unit testing.
+        protected internal virtual void PushWriter(TextWriter writer)
         {
             if (writer == null)
             {
@@ -287,7 +288,8 @@ namespace Microsoft.AspNetCore.Mvc.Razor
             ViewContext.Writer = writer;
         }
 
-        public virtual TextWriter PopWriter()
+        // Internal for unit testing.
+        protected internal virtual TextWriter PopWriter()
         {
             ViewContext.Writer = _textWriterStack.Pop();
             return ViewContext.Writer;
